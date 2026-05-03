@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="CleanCommerce.Api/CleanCommerce.Api.csproj" />
+  <Project Path="CleanCommerce.Application/CleanCommerce.Application.csproj" />
+  <Project Path="CleanCommerce.Domain/CleanCommerce.Domain.csproj" />
+  <Project Path="CleanCommerce.Infrastructure/CleanCommerce.Infrastructure.csproj" />
+</Solution>
