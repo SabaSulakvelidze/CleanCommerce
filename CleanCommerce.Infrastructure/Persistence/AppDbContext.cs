@@ -1,12 +1,7 @@
 ﻿using CleanCommerce.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
 
-namespace CleanCommerce.Infrastructure.Presistance
+namespace CleanCommerce.Infrastructure.Persistence
 {
     public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
     {
@@ -57,7 +52,7 @@ namespace CleanCommerce.Infrastructure.Presistance
             modelBuilder.Entity<Role>().HasData(
                     new Role { Id = 1, Name = "Admin" },
                     new Role { Id = 2, Name = "Manager" },
-                    new Role { Id = 2, Name = "Customer" }
+                    new Role { Id = 3, Name = "Customer" }
                 );
 
             modelBuilder.Entity<UserRole>(entity =>
