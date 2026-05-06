@@ -2,6 +2,7 @@
 using AutoMapper;
 using CleanCommerce.Application.DTOs.Requests;
 using CleanCommerce.Application.DTOs.Responses;
+using CleanCommerce.Application.Exceptions;
 using CleanCommerce.Application.Interfaces.Repositories;
 using CleanCommerce.Application.Interfaces.Services;
 using CleanCommerce.Domain.Entities;
@@ -17,7 +18,7 @@ namespace CleanCommerce.Application.Services
         public async Task<ProductResponse> AddAsync(CreateProductRequest request)
         {
             _ = await productRepository.GetByIdAsync(request.CategoryId) 
-                ?? throw new Exception("Category not found.");
+                ?? throw new NotFoundException("Category not found.");
 
             var product = mapper.Map<Product>(request);
 
@@ -60,7 +61,7 @@ namespace CleanCommerce.Application.Services
             if (existingProduct is null) return null;
 
             _ = await categoryRepository.GetByIdAsync(request.CategoryId)
-                ?? throw new Exception("Category not found.");
+                ?? throw new NotFoundException("Category not found.");
 
             mapper.Map(request, existingProduct);
 
