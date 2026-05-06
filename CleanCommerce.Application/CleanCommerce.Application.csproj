@@ -11,13 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="DTOs\Responses\" />
-    <Folder Include="DTOs\Requests\" />
     <Folder Include="Interfaces\Security\" />
-    <Folder Include="Interfaces\Services\" />
-    <Folder Include="Interfaces\Repositories\" />
-    <Folder Include="Services\" />
-    <Folder Include="Mapping\" />
     <Folder Include="Exceptions\" />
     <Folder Include="DependencyInjection\" />
   </ItemGroup>

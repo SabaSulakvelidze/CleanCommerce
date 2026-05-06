@@ -12,8 +12,8 @@ namespace CleanCommerce.Application.Interfaces.Services
         Task<List<ProductResponse>> GetAllAsync();
         Task<ProductResponse?> GetByIdAsync(int id);
         Task<List<ProductResponse>> GetByCategoryIdAsync(int categoryId);
-        Task<ProductResponse> AddAsync(CreateProductRequest re);
-        Task<ProductResponse> UpdateAsync(int id,UpdateProductRequest request);
+        Task<ProductResponse> AddAsync(CreateProductRequest request);
+        Task<ProductResponse?> UpdateAsync(int id,UpdateProductRequest request);
         Task<bool> DeleteAsync(int id);
     }
 }

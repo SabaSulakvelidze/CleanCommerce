@@ -11,7 +11,7 @@ namespace CleanCommerce.Application.Interfaces.Services
         Task<CategoryResponse?> GetByIdAsync(int id);
         Task<CategoryResponse?> GetByNameAsync(string name);
         Task<CategoryResponse> AddAsync(CreateCategoryRequest request);
-        Task<CategoryResponse> UpdateAsync(int id, UpdateCategoryRequest request);
+        Task<CategoryResponse?> UpdateAsync(int id, UpdateCategoryRequest request);
         Task<bool> DeleteAsync(int id);
     }
 }
