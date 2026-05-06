@@ -25,7 +25,7 @@ namespace CleanCommerce.Infrastructure.DependencyInjection
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
 
-            services.AddScoped<IPasswordHasher, IPasswordHasher>();
+            services.AddScoped<IPasswordHasher, PasswordHasher>();
             services.AddScoped<IJwtTokenService, JwtTokenService>();
             services.AddScoped<ICurrentUserService, CurrentUserService>();
 

@@ -1,12 +1,8 @@
-﻿using BCrypt.Net;
-using CleanCommerce.Application.Interfaces.Security;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using CleanCommerce.Application.Interfaces.Security;
 
 namespace CleanCommerce.Infrastructure.Security
 {
-    public class PaswordHasher : IPasswordHasher
+    public class PasswordHasher : IPasswordHasher
     {
         public string HashPassword(string password)
         {
