@@ -15,7 +15,6 @@
     <Folder Include="Configurations\" />
     <Folder Include="Migrations\" />
     <Folder Include="Security\" />
-    <Folder Include="Repositories\" />
   </ItemGroup>
 
   <ItemGroup>

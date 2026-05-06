@@ -1,10 +1,8 @@
-﻿using CleanCommerce.Infrastructure.Persistence;
+﻿using CleanCommerce.Application.Interfaces.Repositories;
+using CleanCommerce.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace CleanCommerce.Infrastructure.DependencyInjection
 {
@@ -16,6 +14,9 @@ namespace CleanCommerce.Infrastructure.DependencyInjection
         {
             services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddScoped<ICategoryRepository, ICategoryRepository>();
+            services.AddScoped<IProductRepository, IProductRepository>();
 
             return services;
         }
