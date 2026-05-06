@@ -1,6 +1,7 @@
 ﻿
 using CleanCommerce.Application.Interfaces.Repositories;
 using CleanCommerce.Application.Interfaces.Services;
+using CleanCommerce.Application.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
@@ -14,8 +15,8 @@ namespace CleanCommerce.Application.DependencyInjection
                 cfg.AddMaps(typeof(ServiceRegistration).Assembly);
             });
 
-            services.AddScoped<ICategoryService, ICategoryService>();
-            services.AddScoped<IProductService, IProductService>();
+            services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<IProductService, ProductService>();
 
             return services;
         }
