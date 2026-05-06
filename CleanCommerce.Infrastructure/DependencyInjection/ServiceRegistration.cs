@@ -1,6 +1,8 @@
 ﻿using CleanCommerce.Application.Interfaces.Repositories;
+using CleanCommerce.Application.Interfaces.Security;
 using CleanCommerce.Infrastructure.Persistence;
 using CleanCommerce.Infrastructure.Repositories;
+using CleanCommerce.Infrastructure.Security;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,8 +18,16 @@ namespace CleanCommerce.Infrastructure.DependencyInjection
             services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IRoleRepository, RoleRepository>();
+            services.AddScoped<IUserRoleRepository, UserRoleRepository>();
+
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
+
+            services.AddScoped<IPasswordHasher, IPasswordHasher>();
+            services.AddScoped<IJwtTokenService, JwtTokenService>();
+            services.AddScoped<ICurrentUserService, CurrentUserService>();
 
             return services;
         }
