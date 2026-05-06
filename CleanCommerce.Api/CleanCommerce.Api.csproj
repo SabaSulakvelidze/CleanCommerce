@@ -21,9 +21,4 @@
     <ProjectReference Include="..\CleanCommerce.Infrastructure\CleanCommerce.Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Extensions\" />
-    <Folder Include="Middlewares\" />
-  </ItemGroup>
-
 </Project>

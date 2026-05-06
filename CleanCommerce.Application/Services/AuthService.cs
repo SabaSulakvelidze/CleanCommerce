@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CleanCommerce.Application.DTOs.Requests;
 using CleanCommerce.Application.DTOs.Responses;
+using CleanCommerce.Application.Exceptions;
 using CleanCommerce.Application.Interfaces.Repositories;
 using CleanCommerce.Application.Interfaces.Security;
 using CleanCommerce.Application.Interfaces.Services;
@@ -21,12 +22,12 @@ namespace CleanCommerce.Application.Services
         {
             var user = await userRepository.GetByUsernameOrEmailAsync(request.UsernameOrEmail);
             if (user is null)
-                throw new Exception("Invalid credentials.");
+                throw new UnauthorizedException("Invalid credentials.");
 
             var isPasswordValid = passwordHasher.VerifyPassword(request.Password,user.PasswordHash);
 
             if(!isPasswordValid)
-                throw new Exception("Invalid credentials.");
+                throw new UnauthorizedException("Invalid credentials.");
 
             var roles = user.UserRoles
                 .Select(ur => ur.Role.Name)
@@ -48,15 +49,15 @@ namespace CleanCommerce.Application.Services
         {
             var existingUserByUsername = await userRepository.GetByUsernameAsync(request.Username);
             if (existingUserByUsername is not null)
-                throw new Exception("Username already exists.");
+                throw new BadRequestException("Username already exists.");
 
             var existingUserByEmail = await userRepository.GetByEmailAsync(request.Email);
             if (existingUserByEmail is not null)
-                throw new Exception("Email already exists.");
+                throw new BadRequestException("Email already exists.");
 
             var customerRole = await roleRepository.GetByNameAsync("Customer");
             if (customerRole is null)
-                throw new Exception("Default role 'Customer' was not found.");
+                throw new NotFoundException("Default role 'Customer' was not found.");
 
             var user = mapper.Map<User>(request);
 

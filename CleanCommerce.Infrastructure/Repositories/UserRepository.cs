@@ -18,7 +18,7 @@ namespace CleanCommerce.Infrastructure.Repositories
         public async Task<User?> GetByEmailAsync(string email)
         {
             return await context.Users
-                .FirstOrDefaultAsync(u => u.Email == email);
+                .FirstOrDefaultAsync(u => u.Email == email.Trim().ToLowerInvariant());
         }
 
         public async Task<User?> GetByIdAsunc(int id)
@@ -32,7 +32,7 @@ namespace CleanCommerce.Infrastructure.Repositories
         public async Task<User?> GetByUsernameAsync(string username)
         {
             return await context.Users
-                .FirstOrDefaultAsync(u => u.Username == username);
+                .FirstOrDefaultAsync(u => u.Username == username.Trim());
         }
 
         public async Task<User?> GetByUsernameOrEmailAsync(string usernameOrEmail)
@@ -40,7 +40,8 @@ namespace CleanCommerce.Infrastructure.Repositories
             return await context.Users
                 .Include(u => u.UserRoles)
                 .ThenInclude(ur => ur.Role)
-                .FirstOrDefaultAsync(u => u.Username == usernameOrEmail || u.Email == usernameOrEmail);
+                .FirstOrDefaultAsync(u => u.Username == usernameOrEmail.Trim().ToLowerInvariant() ||
+                u.Email == usernameOrEmail.Trim().ToLowerInvariant());
         }
     }
 }

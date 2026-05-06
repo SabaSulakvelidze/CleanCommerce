@@ -1,3 +1,4 @@
+using CleanCommerce.Api.Extensions;
 using CleanCommerce.Application.DependencyInjection;
 using CleanCommerce.Infrastructure.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -78,6 +79,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseGlobalExceptionHandling();
 
 app.UseHttpsRedirection();
 
