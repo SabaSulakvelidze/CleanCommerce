@@ -1,9 +1,6 @@
-﻿
-using CleanCommerce.Application.Interfaces.Repositories;
-using CleanCommerce.Application.Interfaces.Services;
+﻿using CleanCommerce.Application.Interfaces.Services;
 using CleanCommerce.Application.Services;
 using Microsoft.Extensions.DependencyInjection;
-using System.Reflection;
 
 namespace CleanCommerce.Application.DependencyInjection
 {
@@ -15,6 +12,7 @@ namespace CleanCommerce.Application.DependencyInjection
                 cfg.AddMaps(typeof(ServiceRegistration).Assembly);
             });
 
+            services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IProductService, ProductService>();
 
