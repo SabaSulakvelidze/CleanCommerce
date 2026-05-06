@@ -1,6 +1,6 @@
 ﻿using CleanCommerce.Application.DTOs.Requests;
 using CleanCommerce.Application.Interfaces.Services;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CleanCommerce.Api.Controllers
@@ -9,12 +9,14 @@ namespace CleanCommerce.Api.Controllers
     [ApiController]
     public class ProductController(IProductService productService) : ControllerBase
     {
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
             return Ok(await productService.GetAllAsync());
         }
 
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
@@ -23,12 +25,14 @@ namespace CleanCommerce.Api.Controllers
             return Ok(response);
         }
 
-        [HttpGet("by-category/{categoruId}")]
-        public async Task<IActionResult> GetByCategoryId(int categoruId)
+        [Authorize]
+        [HttpGet("by-category/{categoryId}")]
+        public async Task<IActionResult> GetByCategoryId(int categoryId)
         {
-            return Ok(await productService.GetByCategoryIdAsync(categoruId));
+            return Ok(await productService.GetByCategoryIdAsync(categoryId));
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> Create(CreateProductRequest request)
         {
@@ -40,6 +44,7 @@ namespace CleanCommerce.Api.Controllers
                 response);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, UpdateProductRequest request)
         {
@@ -49,6 +54,7 @@ namespace CleanCommerce.Api.Controllers
             return Ok(response);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {

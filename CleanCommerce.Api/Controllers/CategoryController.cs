@@ -1,6 +1,7 @@
 ﻿using CleanCommerce.Application.DTOs.Requests;
 using CleanCommerce.Application.Interfaces.Services;
 using CleanCommerce.Application.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,13 +11,14 @@ namespace CleanCommerce.Api.Controllers
     [ApiController]
     public class CategoryController(ICategoryService categoryService) : ControllerBase
     {
-
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
             return Ok(await categoryService.GetAllAsync());
         }
 
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
@@ -25,6 +27,7 @@ namespace CleanCommerce.Api.Controllers
             return Ok(response);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> Create(CreateCategoryRequest request)
         {
@@ -35,6 +38,7 @@ namespace CleanCommerce.Api.Controllers
                 response);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, UpdateCategoryRequest request)
         {
@@ -43,6 +47,7 @@ namespace CleanCommerce.Api.Controllers
             return Ok(response);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id) 
         {
