@@ -1,6 +1,5 @@
 ﻿using CleanCommerce.Application.DTOs.Requests;
 using CleanCommerce.Application.Interfaces.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CleanCommerce.Api.Controllers
