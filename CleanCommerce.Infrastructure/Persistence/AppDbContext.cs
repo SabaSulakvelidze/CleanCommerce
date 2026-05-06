@@ -72,7 +72,7 @@ namespace CleanCommerce.Infrastructure.Persistence
             {
                 entity.HasKey(x => x.Id);
                 entity.Property(x => x.Name)
-                .HasMaxLength(10)
+                .HasMaxLength(100)
                 .IsRequired();
 
                 entity.HasIndex(x => x.Name).IsUnique();
