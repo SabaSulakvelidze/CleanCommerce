@@ -5,9 +5,9 @@ using CleanCommerce.Domain.Entities;
 
 namespace CleanCommerce.Application.Mapping
 {
-    public class AuthMappingProfile : Profile
+    public class AuthMapping : Profile
     {
-        public AuthMappingProfile()
+        public AuthMapping()
         {
             CreateMap<RegisterUserRequest, User>()
                 .ForMember(dest => dest.Id, opt => opt.Ignore())
