@@ -62,5 +62,11 @@ namespace CleanCommerce.Infrastructure.Repositories
 
             return product;
         }
+
+        public async Task UpdateRangeAsync(List<Product> products)
+        {
+            context.Products.UpdateRange(products);
+            await context.SaveChangesAsync();
+        }
     }
 }
