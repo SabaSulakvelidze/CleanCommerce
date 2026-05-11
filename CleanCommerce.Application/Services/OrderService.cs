@@ -17,6 +17,7 @@ namespace CleanCommerce.Application.Services
         ICartRepository cartRepository,
         IProductRepository productRepository,
         ICurrentUserService currentUserService,
+        IUnitOfWork unitOfWork,
         IMapper mapper
         ) : IOrderService
     {
@@ -27,48 +28,66 @@ namespace CleanCommerce.Application.Services
             var cartItems = await cartRepository.GetByUserIdAsync(userId) ??
                 throw new BadRequestException("Cart is empty.");
 
-            var ProductsToUpdate = new List<Product>();
+            await unitOfWork.BeginTransationAsync();
 
-            var order = new Order
+            try
             {
-                UserId = userId,
-                CreatedAt = DateTime.Now,
-                Status = OrderStatus.Pending,
-                OrderItems = []
-            };
+                var ProductsToUpdate = new List<Product>();
 
-            decimal totalAmount = 0;
-
-            foreach (var cartItem in cartItems)
-            {
-                var product = await productRepository.GetByIdAsync(cartItem.ProductId)
-                    ?? throw new NotFoundException($"Product with id {cartItem.ProductId} was not found");
-
-                if (product.StockQuantity < cartItem.Quantity)
-                    throw new BadRequestException($"Not enaugh quantity in stock for product '${product.Name}'");
-
-                product.StockQuantity -= cartItem.Quantity;
-                ProductsToUpdate.Add(product);
-
-                order.OrderItems.Add(new OrderItem
+                var order = new Order
                 {
-                    ProductId = product.Id,
-                    Quantity = cartItem.Quantity,
-                    UnitPrice = product.Price
-                });
+                    UserId = userId,
+                    CreatedAt = DateTime.Now,
+                    Status = OrderStatus.Pending,
+                    OrderItems = []
+                };
 
-                totalAmount = +product.Price * cartItem.Quantity;
+                decimal totalAmount = 0;
 
+                foreach (var cartItem in cartItems)
+                {
+                    var product = await productRepository.GetByIdAsync(cartItem.ProductId)
+                        ?? throw new NotFoundException($"Product with id {cartItem.ProductId} was not found");
+
+                    if (product.StockQuantity < cartItem.Quantity)
+                        throw new BadRequestException($"Not enaugh quantity in stock for product '${product.Name}'");
+
+                    product.StockQuantity -= cartItem.Quantity;
+                    ProductsToUpdate.Add(product);
+
+                    order.OrderItems.Add(new OrderItem
+                    {
+                        ProductId = product.Id,
+                        Quantity = cartItem.Quantity,
+                        UnitPrice = product.Price
+                    });
+
+                    totalAmount = +product.Price * cartItem.Quantity;
+
+                }
+
+                order.TotalAmount = totalAmount;
+
+                await productRepository.UpdateRangeAsync(ProductsToUpdate);
+
+                await orderRepository.AddSync(order);
+
+                await cartRepository.ClearAsync(cartItems);
+
+                await unitOfWork.SaveChangesAsync();
+
+                await unitOfWork.CommitTransationAsync();
+
+                var createdOrder = await orderRepository.GetByIdAsync(order.Id)
+                    ?? throw new NotFoundException("Created order could not be loaded.");
+
+                return mapper.Map<OrderResponse>(createdOrder);
             }
-
-            order.TotalAmount = totalAmount;
-
-            await productRepository.UpdateRangeAsync(ProductsToUpdate);
-
-            var createdOrder = await orderRepository.AddSync(order);
-
-            await cartRepository.ClearAsync(cartItems);
-            return mapper.Map<OrderResponse>(createdOrder);
+            catch
+            {
+                await unitOfWork.RollbackTransactionAsync();
+                throw;
+            }
         }
 
         public async Task<List<OrderListItemResponse>> GetAllOrderAsync()
@@ -85,7 +104,7 @@ namespace CleanCommerce.Application.Services
         {
             var userId = GetCurrentUserId();
 
-            var order = await orderRepository.GetByIdAsyunc(orderId);
+            var order = await orderRepository.GetByIdAsync(orderId);
 
             if (order is null || order.UserId != userId)
                 throw new BadRequestException("Order was not found.");
@@ -94,7 +113,7 @@ namespace CleanCommerce.Application.Services
 
         public async Task<OrderResponse?> UpdateOrderStatusAsync(int orderId, UpdateOrderStatusRequest request)
         {
-            var order = await orderRepository.GetByIdAsyunc(orderId)
+            var order = await orderRepository.GetByIdAsync(orderId)
                 ?? throw new NotFoundException("Order was not found.");
 
             order.Status = request.Status;
