@@ -8,12 +8,11 @@ namespace CleanCommerce.Infrastructure.Repositories
 {
     public class OrderRepository(AppDbContext context) : IOrderRepository
     {
-        public async Task<Order> AddSync(Order order)
+        public Task<Order> AddSync(Order order)
         {
             context.Orders.Add(order);
-            await context.SaveChangesAsync();
 
-            return order;
+            return Task.FromResult(order);
         }
 
         public async Task<List<Order>> GetAllAsync()
@@ -25,7 +24,7 @@ namespace CleanCommerce.Infrastructure.Repositories
                 .ToListAsync();
         }
 
-        public async Task<Order?> GetByIdAsyunc(int orderId)
+        public async Task<Order?> GetByIdAsync(int orderId)
         {
             return await context.Orders
                 .Include(o => o.OrderItems)

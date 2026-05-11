@@ -20,10 +20,10 @@ namespace CleanCommerce.Infrastructure.Repositories
             return cartItem;
         }
 
-        public async Task ClearAsync(List<CartItem> cartItem)
+        public Task ClearAsync(List<CartItem> cartItem)
         {
             context.CartItems.RemoveRange(cartItem);
-            await context.SaveChangesAsync();
+            return Task.CompletedTask;
         }
 
         public async Task DeleteAsync(CartItem cartItem)
